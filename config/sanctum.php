@@ -46,8 +46,8 @@ return [
     | "expires_at" attribute, but first-party sessions are not affected.
     |
     */
-
-    'expiration' => null,
+    // expiration after 1 day
+    'expiration' => 1440, // 24 hours
 
     /*
     |--------------------------------------------------------------------------
