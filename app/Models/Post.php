@@ -14,11 +14,19 @@ class Post extends Model
     protected $fillable = [
         'title',
         'url',
-        'image' 
+        'image',
+        'is_favorite'
     ];
 
-    public function user()
-    {
+    protected $casts = [
+        'is_favorite' => 'boolean',
+    ];
+
+    public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function categories(){
+        return $this->belongsToMany(Category::class,'post_category');
     }
 }

@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            // Only drop hours_left if it exists (from a previous migration)
-            $columns = Schema::getColumnListing('posts');
-            if (in_array('hours_left', $columns)) {
-                $table->dropColumn('hours_left');
-            }
+            $table->boolean('is_favorite')->default(false);
         });
     }
 
@@ -26,10 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $columns = Schema::getColumnListing('posts');
-            if (!in_array('hours_left', $columns)) {
-                $table->integer('hours_left')->nullable();
-            }
+            $table->dropColumn('is_favorite');
         });
     }
 };

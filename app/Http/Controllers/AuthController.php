@@ -40,7 +40,7 @@ class AuthController extends Controller
                 'message' => 'Bad credentials'
             ], 401);
         }
- 
+
         $token = $user->createToken($user->name);
         return response()->json([
             'user' => $user,

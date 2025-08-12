@@ -1,17 +1,12 @@
 <?php
 
-// use Illuminate\Support\Facades\Route;
-// use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return Inertia::render('welcome');
-// })->name('home');
-
-// Route::middleware(['auth', 'verified'])->group(function () {
-//     Route::get('dashboard', function () {
-//         return Inertia::render('dashboard');
-//     })->name('dashboard');
-// });
-
-// require __DIR__.'/settings.php';
-// require __DIR__.'/auth.php';
+// ruta default para verificar que la API está funcionando
+Route::get('/', function () {
+    return response()->json([
+        'message' => 'Laravel API funcionando correctamente',
+        'version' => app()->version(),
+        'time' => now()->toDateTimeString()
+    ]);
+});
