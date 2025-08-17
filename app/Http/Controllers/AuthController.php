@@ -49,7 +49,11 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        // Delete only the token used in this request. This avoids revoking tokens for other devices/sessions.
+        $currentToken = $request->user()->currentAccessToken();
+        if ($currentToken) {
+            $currentToken->delete();
+        }
         return response()->json([
             'message' => 'Logged out successfully'
         ]);
