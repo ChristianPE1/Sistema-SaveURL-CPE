@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa6";
-import { IoMdCopy } from "react-icons/io";
+import { IoMdCopy, IoMdCloseCircle } from "react-icons/io";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import { IoClose } from "react-icons/io5";
 import { ToastContainer, toast } from 'react-toastify';
@@ -32,8 +32,8 @@ export default function PostsPage() {
 
    const changeIsFavorite = async (postId) => {
       try {
-         const res = await api.patch(`/posts/${postId}/favorite`);
-         console.log('Cambio de favorito exitoso:', res.data);
+         await api.patch(`/posts/${postId}/favorite`);
+         console.log('Cambio de favorito exitoso');
 
          setPosts(posts.map((post) => {
             if (post.id === postId) {
@@ -94,12 +94,21 @@ export default function PostsPage() {
       }
    };
 
+   const deletePost = async (postId) => {
+      try {
+         await api.delete(`/posts/${postId}`);
+         setPosts(posts.filter(post => post.id !== postId));
+      } catch (err) {
+         console.error('Error al eliminar post:', err);
+      }
+   }
+
    useEffect(() => {
       fetchPosts();
    }, []);
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+      <div className="min-h-screen ">
          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-10">
                <h1 className="text-4xl md:text-5xl font-bold mb-4 ">
@@ -128,9 +137,21 @@ export default function PostsPage() {
             {!loading && posts.length > 0 && (
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {posts.map((post) => (
-                     <div key={post.id} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-400 overflow-hidden border border-gray-200">
+                     <main key={post.id} className="relative group bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-400  border border-gray-200">
+                        
                         <header className="relative p-6 pb-0">
-                           <div className="flex justify-between items-center mb-4">
+                           <aside className='absolute -top-3 left-1/2 z-10'>
+                              <button
+                                 className=" cursor-pointer hover:bg-gray-100 rounded-md"
+                                 title="Eliminar post"
+                              >
+                                 <IoMdCloseCircle
+                                 className="text-red-500 hover:text-blue-600 size-8"
+                                 onClick={() => deletePost(post.id)}
+                                 />
+                              </button>
+                           </aside>
+                           <div className="flex justify-between items-center mb-4 mt-3">
                               <div className="flex items-center justify-center gap-2 ">
                                  <h3 className="text-lg font-bold text-gray-800 line-clamp-2 leading-tight">
                                     {post.title}
@@ -176,7 +197,6 @@ export default function PostsPage() {
                            </div>
                         </section>
                         
-                        {/* Footer with actions */}
                         <footer className="p-6 pt-4">
                            <div className="flex items-center gap-3  min-w-0">
                               <button
@@ -209,7 +229,7 @@ export default function PostsPage() {
                               )}
                            </div>
                         </footer>
-                     </div>
+                     </main>
                   ))}
                </div>
             )}
