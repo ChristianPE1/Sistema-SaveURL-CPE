@@ -57,12 +57,7 @@ class CategoryController extends Controller
             abort(403, 'No autorizado');
         }
 
-        $fields = $request->validate([
-            'name' => 'required|string|max:200',
-            'color' => 'nullable|string|max:10'
-        ]);
-
-        $category->update($fields);
+        $category->update($request->validated());
         return response()->json($category);
     }
 
